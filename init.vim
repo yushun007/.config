@@ -71,11 +71,17 @@ call plug#begin('~/.config/nvim/plugged')
   Plug 'preservim/nerdcommenter'
   "vim-move
   Plug 'matze/vim-move'
-  " vim-snippets
-  " Plug 'honza/vim-snippets'
-  " jupyter-vim/jupyter-vim
-  Plug 'jupyter-vim/jupyter-vim'
-call plug#end()
+  "bufferline
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'akinsho/bufferline.nvim'
+  "vim-commentary
+  Plug 'tpope/vim-commentary'
+  "easy-align
+  Plug 'junegunn/vim-easy-align'
+  "expand-region
+  Plug 'terryma/vim-expand-region'
+
+  call plug#end()
 " =======================
 " ===   plugins  end  ===
 " =======================
