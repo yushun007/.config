@@ -4,7 +4,11 @@
 "   3. python3 (pip3 install neovim)
 nnoremap <space>rl :so ~/.config/nvim/init.vim<CR>
 nnoremap <space>rc :e ~/.config/nvim/init.vim<CR>
-
+"===============代码折叠==============
+set foldmethod=indent
+set foldlevel=99
+nnoremap <space>a za
+"===============通用配置==============
 set fileencodings=ucs-bom,utf-8,utf-16,gbk,big5,gb18030,latin1
 set termencoding=utf-8
 set encoding=utf-8
@@ -26,7 +30,10 @@ set noswapfile
 set ruler
 set magic
 set scrolloff=8
+set clipboard=unnamedplus
+set tags+=./tags
 let mapleader = "\<SPACE>" " defualt ,
+let g:python3_host_prog='~/anaconda3/bin/python'
 
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
   :exe '!curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
@@ -39,48 +46,69 @@ endif
 " ===  plugins  begin ===
 " =======================
 call plug#begin('~/.config/nvim/plugged')
+  " graphviz vim 
+  Plug 'liuchengxu/graphviz.vim'
   " markdown preview
   Plug 'iamcco/markdown-preview.nvim',{'do':'cd app && yarn install'}
+  
   " enhance editor
   Plug 'tomtom/tcomment_vim'
+  
+  "vim-pdf
+  Plug 'makerj/vim-pdf'
   
   " terminal
   Plug 'skywind3000/vim-terminal-help'
   
   " file explorer
   Plug 'preservim/nerdtree'
+  
   " file finder
   Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
-
   " highlight
-  Plug 'morhetz/gruvbox'
-  Plug 'jackguo380/vim-lsp-cxx-highlight'
-  
+  "Plug 'morhetz/gruvbox'
+  "Plug 'jackguo380/vim-lsp-cxx-highlight'
+  Plug 'bfrg/vim-cpp-modern'
   " lsp
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   
   " debug
   Plug 'puremourning/vimspector', {'do': './install_gadget.py --enable-rust --enable-python'}
+  
   " tagbar
   Plug 'preservim/tagbar'
+  
   " translator
   Plug 'voldikss/vim-translator'
+  
   " auto-pairs
   Plug 'jiangmiao/auto-pairs'
-  " nerdcommenter
-  Plug 'preservim/nerdcommenter'
+  
   "vim-move
   Plug 'matze/vim-move'
+  
   "bufferline
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'akinsho/bufferline.nvim'
-  "vim-commentary
+  
+  " vim-commentary
   Plug 'tpope/vim-commentary'
+  
   "easy-align
   Plug 'junegunn/vim-easy-align'
+  
   "expand-region
   Plug 'terryma/vim-expand-region'
 
+  "vim-gas
+  Plug 'Shirk/vim-gas'
+  "semantic-highlight.vim
+  Plug 'jaxbot/semantic-highlight.vim'
+  "折叠
+  Plug 'tmhedberg/SimpylFold'
+
+  "colorscheme 
+  Plug 'morhetz/gruvbox'
   call plug#end()
 " =======================
 " ===   plugins  end  ===
@@ -90,11 +118,14 @@ call plug#begin('~/.config/nvim/plugged')
 " =================================
 " ===   plugins  configuration  ===
 " =================================
-"
+" ========tmhedberg SimpylFold=====
+let g:SimpylFold_docstring_preview=1
+" ========semantic highlight=======
+nnoremap <leader>s :SemanticHighlightToggle<cr>
 " =======markdown preservim========
 let g:move_key_modifier='C'
-
-
+" =========commentary===============
+nnoremap <leader>cm :Commentary<cr>
 
 " =======markdown preservim========
 let g:mkdp_auto_start = 0
@@ -103,17 +134,18 @@ let g:mkdp_refresh_slow = 0
 let g:mkdp_command_for_global = 0
 let g:mkdp_open_to_the_world = 0
 let g:mkdp_open_ip = ''
-let g:mkdp_browser = ''
+let g:mkdp_browser = '/usr/bin/google-chrome-stable'
 let g:mkdp_browserfunc = ''
 let g:mkdp_preview_options = {
     \'mkit':{},
     \'katex':{},
     \'maid':{},
     \ 'disable_sync_scroll':0,
+    \ 'sync_scroll_type':'relative',
     \ 'hide_yaml_meta':1,
     \ 'sequence_diagrams':{},
     \ 'flowchart_diagrams':{},
-    \ 'content_editable':v:false,
+    \ 'content_editable':v:true,
     \ 'disable_filename':0
     \}
 let g:mkdp_filetypes = ['markdown']
@@ -153,20 +185,20 @@ colorscheme gruvbox
 
 " ==== jackguo380/vim-lsp-cxx-highlight ====
 
-hi default link LspCxxHlSymFunction cxxFunction
-hi default link LspCxxHlSymFunctionParameter cxxParameter
-hi default link LspCxxHlSymFileVariableStatic cxxFileVariableStatic
-hi default link LspCxxHlSymStruct cxxStruct
-hi default link LspCxxHlSymStructField cxxStructField
-hi default link LspCxxHlSymFileTypeAlias cxxTypeAlias
-hi default link LspCxxHlSymClassField cxxStructField
-hi default link LspCxxHlSymEnum cxxEnum
-hi default link LspCxxHlSymVariableExtern cxxFileVariableStatic
-hi default link LspCxxHlSymVariable cxxVariable
-hi default link LspCxxHlSymMacro cxxMacro
-hi default link LspCxxHlSymEnumMember cxxEnumMember
-hi default link LspCxxHlSymParameter cxxParameter
-hi default link LspCxxHlSymClass cxxTypeAlias
+"hi default link LspCxxHlSymFunction cxxFunction
+"hi default link LspCxxHlSymFunctionParameter cxxParameter
+"hi default link LspCxxHlSymFileVariableStatic cxxFileVariableStatic
+"hi default link LspCxxHlSymStruct cxxStruct
+"hi default link LspCxxHlSymStructField cxxStructField
+"hi default link LspCxxHlSymFileTypeAlias cxxTypeAlias
+"hi default link LspCxxHlSymClassField cxxStructField
+"hi default link LspCxxHlSymEnum cxxEnum
+"hi default link LspCxxHlSymVariableExtern cxxFileVariableStatic
+"hi default link LspCxxHlSymVariable cxxVariable
+"hi default link LspCxxHlSymMacro cxxMacro
+"hi default link LspCxxHlSymEnumMember cxxEnumMember
+"hi default link LspCxxHlSymParameter cxxParameter
+"hi default link LspCxxHlSymClass cxxTypeAlias
 
 
 " ==== neoclide/coc.nvim ====
@@ -179,8 +211,7 @@ let g:coc_global_extensions = [
       \ 'coc-cmake',
       \ 'coc-highlight',
       \ 'coc-pyright',
-      \ 'coc-rust-analyzer',
-      \ 'coc-clangd'
+      \ 'coc-rust-analyzer'
       \ ]
 
 
@@ -289,11 +320,30 @@ xmap <Leader>v <Plug>vimspectorBalloonEval
 nnoremap <leader>tt :TranslateW<CR>
 
 "=========ctags==============
-let g:ctags_path="/usr/bin/ctags-universal"
+let g:ctags_path="/usr/bin/ctags"
 let g:ctags_statusline=1
 nmap <F3> :TagbarToggle<CR>
 
 "=========save==============
-nnoremap <leader>w :w<cr>
-"=========coc-snippets==============
+nnoremap <leader>w :w<CR>
+nnoremap <leader>z :wq<CR>
+
+"=========macro=============
+"注释宏
+" =================color scheme====================
+set t_Co=256
+"===========c cpp highlight================
+"
+" Disable function highlighting (affects both C and C++ files)
+let g:cpp_function_highlight = 1
+
+" Enable highlighting of C++11 attributes
+let g:cpp_attributes_highlight = 1
+
+" Highlight struct/class member variables (affects both C and C++ files)
+let g:cpp_member_highlight = 1
+
+" Put all standard C and C++ keywords under Vim's highlight group 'Statement'
+" (affects both C and C++ files)
+let g:cpp_simple_highlight = 1
 
